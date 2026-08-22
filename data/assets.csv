@@ -1,0 +1,13 @@
+asset_id,device_name,device_type,manufacturer,model,serial_number,assigned_user,department,status,purchase_date,warranty_expiration,last_seen,storage_total_gb,storage_free_gb,operating_system
+A1001,LAPTOP-001,Laptop,Dell,Latitude 5440,DL5440-001,Alex Johnson,Finance,Active,2024-02-15,2027-02-15,2026-08-20,512,210,Windows 11
+A1002,LAPTOP-002,Laptop,Lenovo,ThinkPad T14,LNT14-002,Sarah Miller,IT,Active,2023-06-10,2026-06-10,2026-08-21,512,42,Windows 11
+A1003,DESKTOP-001,Desktop,HP,EliteDesk 800,HP800-003,Michael Davis,Accounting,Active,2022-03-05,2025-03-05,2026-08-18,1000,530,Windows 10
+A1004,LAPTOP-003,Laptop,Apple,MacBook Pro 14,MBP14-004,Emily Wilson,Marketing,Active,2025-01-20,2028-01-20,2026-08-20,512,96,macOS
+A1005,DESKTOP-002,Desktop,Dell,OptiPlex 7090,,David Brown,Operations,Active,2021-11-12,2024-11-12,2026-08-12,1000,105,Windows 10
+A1006,LAPTOP-004,Laptop,Dell,Latitude 5420,DL5420-006,Jessica Garcia,Sales,Inactive,2022-07-08,2025-07-08,2026-05-02,256,18,Windows 10
+A1007,SERVER-001,Server,Dell,PowerEdge R550,PER550-007,IT Department,IT,Active,2024-04-01,2029-04-01,2026-08-21,4000,1250,Ubuntu Server
+A1008,LAPTOP-005,Laptop,Lenovo,ThinkPad X1 Carbon,LNX1-008,Chris Martinez,HR,Active,2025-05-14,2028-05-14,2026-08-19,512,275,Windows 11
+A1009,TABLET-001,Tablet,Apple,iPad Pro,IPAD-009,Lisa Anderson,Sales,Active,2023-09-25,2025-09-25,2026-08-20,256,74,iPadOS
+A1010,LAPTOP-006,Laptop,HP,EliteBook 840,HPEB-010,Robert Taylor,Finance,Active,2023-01-15,2026-01-15,2026-08-01,512,24,Windows 11
+A1011,DESKTOP-003,Desktop,Dell,OptiPlex 7080,OPT7080-011,Amanda Thomas,Accounting,Retired,2020-06-01,2023-06-01,2025-12-15,512,160,Windows 10
+A1012,LAPTOP-007,Laptop,Dell,Latitude 5450,DL5450-012,Kevin Moore,Engineering,Active,2026-02-11,2029-02-11,2026-08-21,1000,810,Windows 11
