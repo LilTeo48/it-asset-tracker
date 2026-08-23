@@ -93,6 +93,33 @@ def add_health_status(
     return assets
 
 
+def style_health_status(value: str) -> str:
+    """Return CSS styling based on asset health status."""
+
+    if value == "Critical":
+        return (
+            "background-color: #ff4b4b;"
+            "color: white;"
+            "font-weight: bold;"
+        )
+
+    if value == "Warning":
+        return (
+            "background-color: #ffa500;"
+            "color: black;"
+            "font-weight: bold;"
+        )
+
+    if value == "Healthy":
+        return (
+            "background-color: #21c354;"
+            "color: white;"
+            "font-weight: bold;"
+        )
+
+    return ""
+
+
 def main() -> None:
     st.set_page_config(
         page_title="IT Asset Tracker",
@@ -121,7 +148,7 @@ def main() -> None:
 
     st.subheader("Filters")
 
-    filter_col1, filter_col2, filter_col3 = st.columns(3)
+    filter_col1, filter_col2, filter_col3, filter_col4 = st.columns(4)
 
     department_options = [
         "All"
@@ -148,6 +175,13 @@ def main() -> None:
         "Low",
     ]
 
+    health_options = [
+        "All",
+        "Critical",
+        "Warning",
+        "Healthy",
+    ]
+
     with filter_col1:
         selected_department = st.selectbox(
             "Department",
@@ -166,6 +200,12 @@ def main() -> None:
             severity_options,
         )
 
+    with filter_col4:
+        selected_health = st.selectbox(
+            "Health Status",
+            health_options,
+        )
+
     filtered_assets = assets.copy()
 
     if selected_department != "All":
@@ -180,7 +220,21 @@ def main() -> None:
             == selected_status
         ]
 
-    filtered_alerts = alerts.copy()
+    if selected_health != "All":
+        filtered_assets = filtered_assets[
+            filtered_assets["health_status"]
+            == selected_health
+        ]
+
+    filtered_asset_ids = filtered_assets[
+        "asset_id"
+    ].tolist()
+
+    filtered_alerts = alerts[
+        alerts["asset_id"].isin(
+            filtered_asset_ids
+        )
+    ].copy()
 
     if selected_severity != "All":
         filtered_alerts = filtered_alerts[
@@ -189,44 +243,47 @@ def main() -> None:
         ]
 
     st.divider()
+    
+ 
 
     # ----------------------------
     # Summary Metrics
     # ----------------------------
 
-    total_assets = len(assets)
+    total_assets = len(filtered_assets)
 
     active_assets = len(
-        assets[
-            assets["status"] == "Active"
+        filtered_assets[
+            filtered_assets["status"] == "Active"
         ]
     )
 
-    total_alerts = len(alerts)
+    total_alerts = len(filtered_alerts)
 
     high_severity_alerts = len(
-        alerts[
-            alerts["severity"] == "High"
+        filtered_alerts[
+            filtered_alerts["severity"] == "High"
         ]
     )
 
     critical_assets = len(
-        assets[
-            assets["health_status"] == "Critical"
+        filtered_assets[
+            filtered_assets["health_status"] == "Critical"
         ]
     )
 
     warning_assets = len(
-        assets[
-            assets["health_status"] == "Warning"
+        filtered_assets[
+            filtered_assets["health_status"] == "Warning"
         ]
     )
 
     healthy_assets = len(
-        assets[
-            assets["health_status"] == "Healthy"
+        filtered_assets[
+            filtered_assets["health_status"] == "Healthy"
         ]
     )
+
 
     metric1, metric2, metric3, metric4 = st.columns(4)
 
@@ -282,7 +339,7 @@ def main() -> None:
         "Low": 1,
     }
 
-    attention = alerts[
+    attention = filtered_alerts[
         [
             "asset_id",
             "device_name",
@@ -374,8 +431,17 @@ def main() -> None:
         "storage_free_gb",
     ]
 
+    styled_inventory = (
+        filtered_assets[inventory_columns]
+        .style
+        .map(
+            style_health_status,
+            subset=["health_status"],
+        )
+    )
+
     st.dataframe(
-        filtered_assets[inventory_columns],
+        styled_inventory,
         width="stretch",
         hide_index=True,
     )
@@ -390,6 +456,7 @@ def main() -> None:
         )
 
     st.divider()
+
 
     # ----------------------------
     # Alerts
@@ -427,7 +494,7 @@ def main() -> None:
     chart_col1, chart_col2 = st.columns(2)
 
     alert_type_summary = (
-        alerts[
+        filtered_alerts[
             "alert_type"
         ]
         .value_counts()
@@ -440,7 +507,7 @@ def main() -> None:
     ]
 
     severity_summary = (
-        alerts[
+        filtered_alerts[
             "severity"
         ]
         .value_counts()
