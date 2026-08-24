@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from clean_assets import clean_assets, load_assets
+from scripts.clean_assets import clean_assets, load_assets
 
 
 LOW_STORAGE_THRESHOLD_GB = 50
