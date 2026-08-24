@@ -3,8 +3,8 @@ import sqlite3
 
 import pandas as pd
 
-from clean_assets import load_assets, clean_assets
-from generate_alerts import generate_alerts
+from scripts.clean_assets import load_assets, clean_assets
+from scripts.generate_alerts import generate_alerts
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -66,8 +66,9 @@ def save_alerts(
         index=False,
     )
 
+def initialize_database() -> None:
+    """Create and populate the SQLite database."""
 
-def main() -> None:
     print("\n--- IT Asset Database Loader ---")
 
     assets = load_assets()
@@ -80,8 +81,15 @@ def main() -> None:
     connection = create_connection()
 
     try:
-        save_assets(connection, database_assets)
-        save_alerts(connection, alerts)
+        save_assets(
+            connection,
+            database_assets,
+        )
+
+        save_alerts(
+            connection,
+            alerts,
+        )
 
         print(f"Database created: {DATABASE_PATH}")
         print(f"Assets stored: {len(database_assets)}")
@@ -91,6 +99,10 @@ def main() -> None:
         connection.close()
 
     print("Database connection closed successfully.")
+
+
+def main() -> None:
+    initialize_database()
 
 
 if __name__ == "__main__":

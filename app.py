@@ -4,6 +4,8 @@ import sqlite3
 import pandas as pd
 import streamlit as st
 
+from scripts.database import initialize_database
+
 
 BASE_DIR = Path(__file__).resolve().parent
 DATABASE_PATH = BASE_DIR / "database" / "assets.db"
@@ -119,6 +121,39 @@ def style_health_status(value: str) -> str:
 
     return ""
 
+def ensure_database() -> None:
+    """Create the database if required tables are missing."""
+
+    needs_initialization = not DATABASE_PATH.exists()
+
+    if not needs_initialization:
+        connection = sqlite3.connect(DATABASE_PATH)
+
+        try:
+            tables = pd.read_sql_query(
+                """
+                SELECT name
+                FROM sqlite_master
+                WHERE type='table'
+                """,
+                connection,
+            )
+
+            existing_tables = set(
+                tables["name"].tolist()
+            )
+
+            needs_initialization = not {
+                "assets",
+                "alerts",
+            }.issubset(existing_tables)
+
+        finally:
+            connection.close()
+
+    if needs_initialization:
+        initialize_database()
+
 
 def main() -> None:
     st.set_page_config(
@@ -126,8 +161,8 @@ def main() -> None:
         page_icon="💻",
         layout="wide",
     )
-    
 
+    ensure_database()
 
     st.title("IT Asset Tracker & Alert System")
     st.caption(
